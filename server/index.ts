@@ -1,5 +1,4 @@
-import app from "./app";
-
+import app from "./app"; //Hono App
 //bun server
 const server = Bun.serve({
   port: 3000,
