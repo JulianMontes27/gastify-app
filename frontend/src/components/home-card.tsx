@@ -13,11 +13,11 @@ const HomeCard = () => {
   const [totalSpent, settotalSpent] = useState(0);
   useEffect(() => {
     async function fetchData() {
-      const res = await client.api.expenses["total-spent"].$get(); //fetch("/api/expenses/total-spent");
+      const res = await client.api.expenses["total-spent"].$get(); //instead of: fetch("/api/expenses/total-spent");
       if (!res.ok) {
       }
-      const data = await res.json();
-      settotalSpent(data.total);
+      const { total } = await res.json();
+      settotalSpent(total);
     }
     fetchData();
   }, []);
