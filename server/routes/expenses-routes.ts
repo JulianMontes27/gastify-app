@@ -17,6 +17,10 @@ export const expensesRoute = new Hono()
   .get("/", (c) => {
     return c.json({ expenses });
   })
+  .get("/total-spent", (c) => {
+    const total = expenses.reduce((acc, curr) => acc + curr.amount, 0);
+    return c.json({ total });
+  })
   .post(
     "/",
     zValidator("json", newPostSchema), //Middleware: validate incoming values using Zod

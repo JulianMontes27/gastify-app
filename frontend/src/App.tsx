@@ -1,13 +1,11 @@
-import { useState } from "react";
+import HomeCard from "./components/home-card";
 
-function App() {
-  const [first, setfirst] = useState(0);
+const App = () => {
   return (
-    <main>
-      <button onClick={() => setfirst((prev) => prev + 1)}>click</button>
-      <p>{first}</p>
-    </main>
+    <section className="mt-5">
+      <HomeCard />
+    </section>
   );
-}
+};
 
 export default App;
