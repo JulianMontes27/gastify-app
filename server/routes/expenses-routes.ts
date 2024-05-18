@@ -54,3 +54,5 @@ export const expensesRoute = new Hono()
     expenses.splice(index, 1);
     return c.json({ message: "Item deleted", expenses });
   });
+
+

@@ -1,3 +1,5 @@
+import client from "@/lib/honoRPCClient";
+
 import {
   Card,
   CardContent,
@@ -11,7 +13,9 @@ const HomeCard = () => {
   const [totalSpent, settotalSpent] = useState(0);
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("/api/expenses/total-spent");
+      const res = await client.api.expenses["total-spent"].$get(); //fetch("/api/expenses/total-spent");
+      if (!res.ok) {
+      }
       const data = await res.json();
       settotalSpent(data.total);
     }
