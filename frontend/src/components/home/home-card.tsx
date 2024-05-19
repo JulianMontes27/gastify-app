@@ -53,19 +53,17 @@ const HomeCard = () => {
   // });
   return (
     <>
-      {isPending ? (
-        <div>Loading...</div>
-      ) : (
-        <Card className="border-none flex items-center flex-col justify-center">
-          <CardHeader className="flex flex-col justify-center items-center">
-            <CardTitle>Total Spent</CardTitle>
-            <CardDescription>The amount you've spent</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>{data?.total}</p>
-          </CardContent>
-        </Card>
-      )}
+      <Card className="border-none flex items-center flex-col justify-center">
+        <CardHeader className="flex flex-col justify-center items-center">
+          <CardTitle>Total Spent</CardTitle>
+          <CardDescription>The amount you've spent</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>
+            $ <span className="font-bold text-lg">{data?.total}</span>
+          </p>
+        </CardContent>
+      </Card>
     </>
   );
 };

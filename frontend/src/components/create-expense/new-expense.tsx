@@ -46,7 +46,7 @@ const NewExpense = () => {
             <FormItem>
               <FormLabel className="text-lg ">Add a new expense</FormLabel>
               <FormControl>
-                <Input placeholder="Title" {...field} />
+                <Input placeholder="Title" required {...field} />
               </FormControl>
               <FormDescription>
                 Give your expense a unique title.
@@ -61,7 +61,7 @@ const NewExpense = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="$" type="number" {...field} />
+                <Input placeholder="$" type="number" required {...field} />
               </FormControl>
               <FormDescription>The amount of the expense.</FormDescription>
               <FormMessage />
