@@ -17,7 +17,8 @@ export const expensesRoute = new Hono()
   .get("/", (c) => {
     return c.json({ expenses });
   })
-  .get("/total-spent", (c) => {
+  .get("/total-spent", async (c) => {
+    // await new Promise((res) => setTimeout(res, 2000));
     const total = expenses.reduce((acc, curr) => acc + curr.amount, 0);
     return c.json({ total });
   })
@@ -54,5 +55,3 @@ export const expensesRoute = new Hono()
     expenses.splice(index, 1);
     return c.json({ message: "Item deleted", expenses });
   });
-
-
