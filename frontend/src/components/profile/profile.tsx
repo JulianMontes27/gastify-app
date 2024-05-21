@@ -1,29 +1,16 @@
-import client from "@/lib/honoRPCClient";
+import userQueryOptions from "@/lib/query-cache";
 
 import { useQuery } from "@tanstack/react-query";
 
-async function getUserData() {
-  try {
-    const res = await client.api["me"].$get();
-    if (!res) {
-      throw new Error("Please log in");
-    }
-    const data = await res.json();
-    // console.log(data.profile.given_name);
-    return data;
-  } catch (error) {
-    throw new Error("Not logged in");
-  }
-}
-
 const Profile = () => {
   //query user data
-  const { error, data } = useQuery({
-    queryKey: ["get-user-data"],
-    queryFn: getUserData,
-  });
+  const { data, error } = useQuery(userQueryOptions); //cached query!
   if (error) {
-    return <span>Error: {error.message}</span>;
+    return(
+      <div>
+        There has been an error getting your info.
+      </div>
+    );
   }
   return (
     <section>

@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { expenseSchema, newPostSchema } from "./schemas";
+import { getUser } from "../kinde"; //routes are only called if the user is authenticated
 
 //to get the Expense as a Typescript type, we use z.infer<typeof {zod schema}>
 type Expense = z.infer<typeof expenseSchema>;
@@ -17,13 +18,14 @@ export const expensesRoute = new Hono()
   .get("/", (c) => {
     return c.json({ expenses });
   })
-  .get("/total-spent", async (c) => {
+  .get("/total-spent", getUser, async (c) => {
     // await new Promise((res) => setTimeout(res, 2000));
     const total = expenses.reduce((acc, curr) => acc + curr.amount, 0);
     return c.json({ total });
   })
   .post(
     "/",
+    getUser,
     zValidator("json", newPostSchema), //Middleware: validate incoming values using Zod
     async (c) => {
       //get the body from the incoming post request
@@ -33,7 +35,7 @@ export const expensesRoute = new Hono()
       return c.json({ expenses });
     }
   ) //dynamic path parameter (Regexp to force the client to pass a number)
-  .get("/:id{[0-9]+}", (c) => {
+  .get("/:id{[0-9]+}", getUser, (c) => {
     const id = c.req.param("id");
     //get the expense with Id
     const expenseWithId = expenses.find(
@@ -44,7 +46,7 @@ export const expensesRoute = new Hono()
     }
     return c.json({ expense: expenseWithId });
   })
-  .delete("/:id{[0-9]+}", (c) => {
+  .delete("/:id{[0-9]+}", getUser, (c) => {
     const id = Number.parseInt(c.req.param("id"));
     //find the index of the obj with the Id
     const index = expenses.findIndex((expense) => expense.id === id);

@@ -11,64 +11,79 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ProfileImport } from './routes/profile'
-import { Route as MyExpensesImport } from './routes/my-expenses'
-import { Route as CreateExpenseImport } from './routes/create-expense'
-import { Route as IndexImport } from './routes/index'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedMyExpensesImport } from './routes/_authenticated/my-expenses'
+import { Route as AuthenticatedCreateExpenseImport } from './routes/_authenticated/create-expense'
 
 // Create/Update Routes
 
-const ProfileRoute = ProfileImport.update({
-  path: '/profile',
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
 } as any)
 
-const MyExpensesRoute = MyExpensesImport.update({
-  path: '/my-expenses',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CreateExpenseRoute = CreateExpenseImport.update({
-  path: '/create-expense',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const IndexRoute = IndexImport.update({
+const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
+
+const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedMyExpensesRoute = AuthenticatedMyExpensesImport.update({
+  path: '/my-expenses',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedCreateExpenseRoute = AuthenticatedCreateExpenseImport.update(
+  {
+    path: '/create-expense',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
-    '/create-expense': {
-      id: '/create-expense'
+    '/_authenticated/create-expense': {
+      id: '/_authenticated/create-expense'
       path: '/create-expense'
       fullPath: '/create-expense'
-      preLoaderRoute: typeof CreateExpenseImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedCreateExpenseImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/my-expenses': {
-      id: '/my-expenses'
+    '/_authenticated/my-expenses': {
+      id: '/_authenticated/my-expenses'
       path: '/my-expenses'
       fullPath: '/my-expenses'
-      preLoaderRoute: typeof MyExpensesImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedMyExpensesImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/profile': {
-      id: '/profile'
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedProfileImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexImport
+      parentRoute: typeof AuthenticatedImport
     }
   }
 }
@@ -76,10 +91,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  CreateExpenseRoute,
-  MyExpensesRoute,
-  ProfileRoute,
+  AuthenticatedRoute: AuthenticatedRoute.addChildren({
+    AuthenticatedCreateExpenseRoute,
+    AuthenticatedMyExpensesRoute,
+    AuthenticatedProfileRoute,
+    AuthenticatedIndexRoute,
+  }),
 })
 
 /* prettier-ignore-end */
