@@ -1,6 +1,9 @@
 import { Hono } from "hono";
 import { kindeClient, sessionManager } from "../kinde";
 
+//middleware
+import { getUser } from "../kinde";
+
 export const authRoute = new Hono()
   .get("/login", async (c) => {
     const loginUrl = await kindeClient.login(sessionManager(c));
@@ -20,13 +23,13 @@ export const authRoute = new Hono()
     const logoutUrl = await kindeClient.logout(sessionManager(c));
     return c.redirect(logoutUrl.toString());
   })
-  .get("/me", async (c) => {
-    let user;
-    const isAuth = await kindeClient.isAuthenticated(sessionManager(c));
-    if (!isAuth) {
-      console.log("not auth");
-      return c.redirect("/api/register");
-    }
-    const profile = await kindeClient.getUserProfile(sessionManager(c));
+  .get("/me", getUser, async (c) => {
+    // const manager = sessionManager(c);
+    // const isAuth = await kindeClient.isAuthenticated(manager);
+    // if (!isAuth) {
+    //   return c.json({ error: "Unauthorized" });
+    // }
+    // const profile = await kindeClient.getUserProfile(manager);
+    const profile = c.var.user;
     return c.json({ profile });
   });
