@@ -29,6 +29,8 @@ export const sessionManager = (c: Context): SessionManager => ({
     if (typeof value === "string") {
       setCookie(c, key, value, {
         httpOnly: true,
+        secure: true,
+        sameSite: "Lax",
       });
     } else {
       setCookie(c, key, JSON.stringify(value));
