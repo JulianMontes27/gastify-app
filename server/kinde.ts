@@ -26,15 +26,12 @@ export const sessionManager = (c: Context): SessionManager => ({
     return result;
   },
   async setSessionItem(key: string, value: unknown) {
-    const cookieOptions = {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Lax",
-    } as const;
     if (typeof value === "string") {
-      setCookie(c, key, value, cookieOptions);
+      setCookie(c, key, value, {
+        httpOnly: true,
+      });
     } else {
-      setCookie(c, key, JSON.stringify(value), cookieOptions);
+      setCookie(c, key, JSON.stringify(value));
     }
   },
   async removeSessionItem(key: string) {

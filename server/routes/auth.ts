@@ -21,6 +21,12 @@ export const authRoute = new Hono()
     return c.redirect(logoutUrl.toString());
   })
   .get("/me", async (c) => {
+    let user;
     const isAuth = await kindeClient.isAuthenticated(sessionManager(c));
-    return c.json({ isAuth });
+    if (!isAuth) {
+      console.log("not auth");
+      return c.redirect("/api/register");
+    }
+    const profile = await kindeClient.getUserProfile(sessionManager(c));
+    return c.json({ profile });
   });
